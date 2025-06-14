@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="异常处理小记本文对互联上关于异常处理的博客文章进行了整理和总结。如有意(xiao)见(sheng)或建(B)议(B)可以发邮件给我，万分感谢。当前并没有列举相应的工程实例和本人的异常实践，之后会慢慢打磨完善，To Be Continued… 小记 使用try..catch..finally..编程模式。 异常捕获不绝对影响程序的性能。 不在try语句块里放置大量代码。 多个函数使用独立的catch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="异常处理小记">
+<meta property="og:url" content="http://xiaoxux.me/2018/11/26/异常处理小记/index.html">
+<meta property="og:site_name" content="小徐札记">
+<meta property="og:description" content="异常处理小记本文对互联上关于异常处理的博客文章进行了整理和总结。如有意(xiao)见(sheng)或建(B)议(B)可以发邮件给我，万分感谢。当前并没有列举相应的工程实例和本人的异常实践，之后会慢慢打磨完善，To Be Continued… 小记 使用try..catch..finally..编程模式。 异常捕获不绝对影响程序的性能。 不在try语句块里放置大量代码。 多个函数使用独立的catch">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-26T02:53:09.519Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="异常处理小记">
+<meta name="twitter:description" content="异常处理小记本文对互联上关于异常处理的博客文章进行了整理和总结。如有意(xiao)见(sheng)或建(B)议(B)可以发邮件给我，万分感谢。当前并没有列举相应的工程实例和本人的异常实践，之后会慢慢打磨完善，To Be Continued… 小记 使用try..catch..finally..编程模式。 异常捕获不绝对影响程序的性能。 不在try语句块里放置大量代码。 多个函数使用独立的catch">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xiaoxux.me/2018/11/26/异常处理小记/"/>
+
+
+
+
+
+  <title>异常处理小记 | 小徐札记</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小徐札记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://xiaoxux.me/2018/11/26/异常处理小记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="MR.X_YY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小徐札记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">异常处理小记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-26T10:27:40+08:00">
+                2018-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="异常处理小记"><a href="#异常处理小记" class="headerlink" title="异常处理小记"></a>异常处理小记</h1><p>本文对互联上<a href="#相关主题">关于异常处理的博客文章</a>进行了整理和总结。如有意(xiao)见(sheng)或建(B)议(B)可以<a href="mailto:mr.xu.robot.zh@gmail.com" target="_blank" rel="noopener">发邮件给我</a>，万分感谢。<br>当前并没有列举相应的工程实例和本人的异常实践，之后会慢慢打磨完善，To Be Continued…</p>
+<h2 id="小记"><a href="#小记" class="headerlink" title="小记"></a>小记</h2><ul>
+<li><a href="#使用try..catch..finally..编程模式。">使用try..catch..finally..编程模式。</a></li>
+<li><a href="#异常捕获不绝对影响程序的性能。">异常捕获不绝对影响程序的性能。</a></li>
+<li><a href="#不在try语句块里放置大量代码。">不在try语句块里放置大量代码。</a></li>
+<li><a href="#多个函数使用独立的catch。">多个函数使用独立的catch。</a></li>
+<li><a href="#编程时不要忽略任何异常。">编程时不要忽略任何异常。</a></li>
+<li><a href="#程序出现异常尽量立即处理。">程序出现异常尽量立即处理。</a></li>
+<li><a href="#编程应准确的区分各种异常。">编程应准确的区分各种异常。</a></li>
+<li><a href="#不使用异常处理业务逻辑。">不使用异常处理业务逻辑。</a></li>
+<li><a href="#正确处理NullPointException。">正确处理NullPointException。</a></li>
+<li><a href="#循环中不放置异常代码。">循环中不放置异常代码。</a></li>
+<li><a href="#异常处理后清理分配资源。">异常处理后清理分配资源。</a></li>
+<li><a href="#精简打印异常日志。">精简打印异常日志。</a></li>
+<li><a href="#打印异常关键信息。">打印异常关键信息。</a></li>
+<li><a href="#合理考虑日志框架。">合理考虑日志框架。</a></li>
+<li><a href="#避免在前台出现错误代码。">避免在前台出现错误代码。</a></li>
+<li><a href="#异端，不要catch异常，不要做空判断，异常抛到最外层处理。">异端，不要catch异常，不要做空判断，异常抛到最外层处理。</a></li>
+</ul>
+<h2 id="使用try-catch-finally-编程模式。"><a href="#使用try-catch-finally-编程模式。" class="headerlink" title="使用try{..}catch..finally..编程模式。"></a>使用try{..}catch..finally..编程模式。</h2><h3 id="让代码自己解释自己。"><a href="#让代码自己解释自己。" class="headerlink" title="让代码自己解释自己。"></a>让代码自己解释自己。</h3><p>语言本身支持<strong>相当先进的Union类型</strong>，本身能非常直观的看出函数接口的输入输出以及错误的处理，让代码自己解释自己。</p>
+<h3 id="分离正常逻辑、错误处理和资源清理代码。"><a href="#分离正常逻辑、错误处理和资源清理代码。" class="headerlink" title="分离正常逻辑、错误处理和资源清理代码。"></a>分离正常逻辑、错误处理和资源清理代码。</h3><p>分离代码，在try语句块中添加正常的业务逻辑，而在catch中处理错误，在finally中清理资源，<strong>提高代码的可读性</strong>。</p>
+<h3 id="无法忽略异常。"><a href="#无法忽略异常。" class="headerlink" title="无法忽略异常。"></a>无法忽略异常。</h3><p>代码在尝试后出现异常无法被直接忽略，这里使用catch后不处理，不抛出，其实是显示的忽略。</p>
+<h3 id="多态式catch。"><a href="#多态式catch。" class="headerlink" title="多态式catch。"></a>多态式catch。</h3><p><strong>同类错误的定义最好是可以扩展的</strong>。这一点非常重要，而对于这一点，通过面向对象的继承或是像 Go 语言那样的接口多态可以很好地做到。在面向对象的语言中（如Java），异常是个对象，所以可以实现多态式catch。这样可以方便地重用已有的代码。</p>
+<h3 id="实现函数的链式或嵌套调用。"><a href="#实现函数的链式或嵌套调用。" class="headerlink" title="实现函数的链式或嵌套调用。"></a>实现函数的链式或嵌套调用。</h3><p>与状态返回码相比，异常捕获有一个显著的的好处式是，<strong>函数可以嵌套调用，或是链式调用</strong>。比如:int x = add(a,div(b,c));或者<br>Pizza p = PizzaBulid().SetSize(sz).SetPrice(p)…，在需要返回码的情况下，比较难以实现。</p>
+<h3 id="异步的情形下实现难度较大。"><a href="#异步的情形下实现难度较大。" class="headerlink" title="异步的情形下实现难度较大。"></a>异步的情形下实现难度较大。</h3><p>异步的try语句块中运行在另一个线程中，<strong>异常的抛出无法在调用者线程中被捕获</strong>，这是一个大问题。</p>
+<h2 id="异常捕获不绝对影响程序的性能。"><a href="#异常捕获不绝对影响程序的性能。" class="headerlink" title="异常捕获不绝对影响程序的性能。"></a>异常捕获不绝对影响程序的性能。</h2><h3 id="程序在执行需要处理函数栈上的上下文。"><a href="#程序在执行需要处理函数栈上的上下文。" class="headerlink" title="程序在执行需要处理函数栈上的上下文。"></a>程序在执行需要处理函数栈上的上下文。</h3><p>异常捕捉的确是对性能有影响的，那是因为一旦异常被抛出，函数也就跟着 return 了。而程序在执行需要<strong>处理函数栈上的上下文</strong>，这会导致性能变得很慢，尤其是函数栈比较深的时候。</p>
+<h3 id="有异常的情况是少数的情况。"><a href="#有异常的情况是少数的情况。" class="headerlink" title="有异常的情况是少数的情况。"></a>有异常的情况是少数的情况。</h3><p>但从另一方面来说，<strong>异常的抛出基本上表明程序的错误。程序在绝大多数情况下，应该是在没有异常的情况下运行的</strong>，所以，有异常的情况应该是少数的情况，不会影响正常处理的性能问题。</p>
+<h2 id="不在try语句块里放置大量代码。"><a href="#不在try语句块里放置大量代码。" class="headerlink" title="不在try语句块里放置大量代码。"></a>不在try语句块里放置大量代码。</h2><h3 id="完成一个简单单一的事情。"><a href="#完成一个简单单一的事情。" class="headerlink" title="完成一个简单单一的事情。"></a>完成一个简单单一的事情。</h3><p>一个 try 语句块内的语句应该是完成<strong>一个简单单一</strong>的事情。</p>
+<h3 id="大大加速你的调试过程。"><a href="#大大加速你的调试过程。" class="headerlink" title="大大加速你的调试过程。"></a>大大加速你的调试过程。</h3><p>减少try{..}catch里的代码量，提供更加精确的错误信息，<strong>大大加速你的调试过程</strong>。</p>
+<h2 id="多个函数使用独立的catch。"><a href="#多个函数使用独立的catch。" class="headerlink" title="多个函数使用独立的catch。"></a>多个函数使用独立的catch。</h2><h3 id="不使用覆盖式处理器如基类Exception去捕获异常。"><a href="#不使用覆盖式处理器如基类Exception去捕获异常。" class="headerlink" title="不使用覆盖式处理器如基类Exception去捕获异常。"></a>不使用覆盖式处理器如基类Exception去捕获异常。</h3><p>原本针对性的异常处理，变成宽泛，容易捕获其它的异常，当覆盖式处理器对新异常类执行千篇一律的任务时，<strong>只能间接看到异常的处理结果</strong>。如果代码没有打印或记录语句，则根本看不到结果。更糟糕的是，当代码发生变化时，<strong>覆盖式处理器将继续作用于所有新异常类型</strong>，并以相同方式处理所有类型。</p>
+<h3 id="对应的异常抛出不同的错误码。"><a href="#对应的异常抛出不同的错误码。" class="headerlink" title="对应的异常抛出不同的错误码。"></a>对应的异常抛出不同的错误码。</h3><p>一段方法执行过程中抛出了几个不同类型的异常，通常为了简介代码，利用基类Exception捕获所有潜在异常。这里利用基类 Exception 捕捉的所有潜在的异常，<strong>如果多个层次这样捕捉，会丢失原始异常的有效信息</strong>。这里可以重构为对应的异常抛出不同的错误码。</p>
+<h2 id="编程时不要忽略任何异常。"><a href="#编程时不要忽略任何异常。" class="headerlink" title="编程时不要忽略任何异常。"></a>编程时不要忽略任何异常。</h2><h3 id="无法知晓函数执行是否成功。"><a href="#无法知晓函数执行是否成功。" class="headerlink" title="无法知晓函数执行是否成功。"></a>无法知晓函数执行是否成功。</h3><p> 当你把你把异常catch了，不报错，不打日志（即便打日志也少有人去看），不抛异常，那么你就无法知晓函数是否执行成功，生产上出现问题你也<strong>无法第一时间知晓</strong>，严重的造成数据丢失这种无法挽回的损失。</p>
+<h3 id="只将异常输出到控制台，没有任何意义。"><a href="#只将异常输出到控制台，没有任何意义。" class="headerlink" title="只将异常输出到控制台，没有任何意义。"></a>只将异常输出到控制台，没有任何意义。</h3><p>忽略异常异常处理只<strong>将异常输出到控制台</strong>，没有任何意义。并且<strong>出现异常没有中断程序</strong>，进而调用代码继续执行，<strong>导致更多异常</strong>。</p>
+<h3 id="不能预知潜在的异常。"><a href="#不能预知潜在的异常。" class="headerlink" title="不能预知潜在的异常。"></a>不能预知潜在的异常。</h3><p>在写代码的过程中，由于<strong>对调用代码缺乏深层次的了解</strong>，不能准确判断是否调用的代码会产生异常，因而忽略处理。在产生了 Production Bug 之后才想起来应该在某段代码处添加异常补捉，<strong>甚至不能准确指出出现异常的原因</strong>。这就需要开发人员不仅知道自己在做什么，而且要去尽可能的知道别人做了什么，可能会导致什么结果，从全局去考虑整个应用程序的处理过程。这些思想会影响我们对代码的编写和处理。</p>
+<h3 id="一般不要忽略问题。"><a href="#一般不要忽略问题。" class="headerlink" title="一般不要忽略问题。"></a>一般不要忽略问题。</h3><p>一般不要忽略异常。<strong>忽略错误最好有日志</strong>。不然会给维护带来很大的麻烦。如果采取措施，记录了捕获的异常，则不可能遇到这个问题。实际上，除非确认异常对代码其余部分绝无影响，至少也要作记录。进一步讲，<strong>永远不要忽略问题</strong>；否则，风险很大，在后期会引发难以预料的后果。</p>
+<h2 id="程序出现异常尽量立即处理。"><a href="#程序出现异常尽量立即处理。" class="headerlink" title="程序出现异常尽量立即处理。"></a>程序出现异常尽量立即处理。</h2><h3 id="让调用者变得更简单。"><a href="#让调用者变得更简单。" class="headerlink" title="让调用者变得更简单。"></a>让调用者变得更简单。</h3><p><strong>在异常出现时当即处理异常</strong>，这样可以让调用者变得更简单。否则<strong>异常抛出到调用者</strong>，<strong>调用者可能无法处理</strong>。</p>
+<h3 id="清晰代码的层次结构。"><a href="#清晰代码的层次结构。" class="headerlink" title="清晰代码的层次结构。"></a>清晰代码的层次结构。</h3><p>我们经常将代码分 Service、Business Logic、DAO 等不同的层次结构，DAO 层中会包含抛出异常的方法,如SQLException但是从设计耦合角度考虑，<strong>这里的SQLException污染到了上层调用代码</strong>，调用层需要显示的利用try-catch捕或，或者向更上层次进一步抛出。<strong>根据设计隔离原则</strong>，<strong>利用非检测异常封装检测异常，降低层次耦合，并且在结束后清理资源</strong>。</p>
+<h3 id="具体问题具体解决。"><a href="#具体问题具体解决。" class="headerlink" title="具体问题具体解决。"></a>具体问题具体解决。</h3><p><strong>具体问题具体解决</strong>。异常的部分优点在于能为不同类型的问题提供不同的处理操作。<strong>有效异常处理的关键是识别特定故障场景，并开发解决此场景的特定相应行为</strong>。为了充分利用异常处理能力，需要为特定类型的问题构建特定的处理器块。</p>
+<h3 id="将异常转化为业务上下文。"><a href="#将异常转化为业务上下文。" class="headerlink" title="将异常转化为业务上下文。"></a>将异常转化为业务上下文。</h3><p><strong>根据情形将异常转化为业务上下文</strong>。若要通知一个应用程序特有的问题，有必要将应用程序转换为不同形式。<strong>若用业务特定状态表示异常，则代码更易维护</strong>。从某种意义上讲，无论何时将异常传到不同上下文（即另一技术层），都应将异常转换为对新上下文有意义的形式。</p>
+<h3 id="避免能避免的异常。"><a href="#避免能避免的异常。" class="headerlink" title="避免能避免的异常。"></a>避免能避免的异常。</h3><p><strong>不要处理能够避免的异常</strong>。对于有些异常类型，实际上根本不必处理。<strong>通常运行时异常属于此类范畴。在处理空指针或者数据索引等问题时，不必求助于异常处理</strong>。</p>
+<h3 id="尽可能的处理异常。"><a href="#尽可能的处理异常。" class="headerlink" title="尽可能的处理异常。"></a>尽可能的处理异常。</h3><p><strong>尽可能的处理异常</strong>，如果条件确实不允许，无法在自己的代码中完成处理，<strong>就考虑声明异常</strong>。如果人为避免在代码中处理异常，仅作声明，则是一种错误和依赖的实践。</p>
+<h3 id="用统一的模式处理同一异常。"><a href="#用统一的模式处理同一异常。" class="headerlink" title="用统一的模式处理同一异常。"></a>用统一的模式处理同一异常。</h3><p><strong>对于同类的错误处理，用一样的模式</strong>。比如，对于null对象的错误，要么都用返回 null，加上条件检查的模式，要么都用抛 NullPointerException 的方式处理。不要混用，这样有助于代码规范。</p>
+<h3 id="返回原始的错误。"><a href="#返回原始的错误。" class="headerlink" title="返回原始的错误。"></a>返回原始的错误。</h3><p><strong>向上尽可能地返回原始的错误</strong>。如果一定要把错误返回到更高层去处理，那么，应该返回原始的错误，而不是重新发明一个错误。</p>
+<h3 id="不要把特定的异常转化为更通用的异常。"><a href="#不要把特定的异常转化为更通用的异常。" class="headerlink" title="不要把特定的异常转化为更通用的异常。"></a>不要把特定的异常转化为更通用的异常。</h3><p><strong>一般不要把特定的异常转化为更通用的异常</strong>。将特定的异常转换为更通用异常时一种错误做法。一般而言，这将取消异常起初抛出时产生的上下文，在将异常传到系统的其他位置时，将更难处理。</p>
+<h3 id="多次封装异常会丢失原有的有效信息。"><a href="#多次封装异常会丢失原有的有效信息。" class="headerlink" title="多次封装异常会丢失原有的有效信息。"></a>多次封装异常会丢失原有的有效信息。</h3><p>将 Exception 转换成 RuntimeException时，这里的 <strong>e 其实是 RuntimeException 的实例，已经在前段代码中封装过</strong>，现在将 RuntimeException 又重新封装了一次，直接导致丢失了原有的 RuntimeException 携带的有效信息。</p>
+<h3 id="在-RuntimeException-类中添加相关的检查。"><a href="#在-RuntimeException-类中添加相关的检查。" class="headerlink" title="在 RuntimeException 类中添加相关的检查。"></a>在 RuntimeException 类中添加相关的检查。</h3><p><strong>当出现需要多次封装异常的情形时，我们可以在 RuntimeException 类中添加相关的检查，确认参数 Throwable 不是 RuntimeException 的实例。如果是，将拷贝相应的属性到新建的实例上</strong>。或者用不同的 catch 语句块捕捉 RuntimeException 和其它的 Exception。个人偏好方式一，好处不言而喻。</p>
+<h3 id="使用-Promise-模式处理异步调用的异常。"><a href="#使用-Promise-模式处理异步调用的异常。" class="headerlink" title="使用 Promise 模式处理异步调用的异常。"></a>使用 Promise 模式处理异步调用的异常。</h3><p>try..catch无法处理异步异常原因有三。</p>
+<ol>
+<li>函数在被异步运行中，所谓的返回只是把处理权交给下一条指令，而不是把函数运行完的结果返回。所以，函数返回的语义完全变了，返回码也没有用了。</li>
+<li>无法使用抛异常的方式。因为除了上述的函数立马返回的原因之外，抛出的异常也在另外一个线程中，不同线程中的栈是完全不一样的，所以主线程的 catch 完全看不到另外一个线程中的异常。</li>
+<li>在异步编程的世界里，我们也会有好几种处理错误的方法，最常用的就是 <strong>callback 方式</strong>。在做异步请求的时候，注册几个 OnSuccess()、 OnFailure() 这样的函数，让在另一个线程中<strong>运行的异步代码来回调过来</strong>。<br>而对于异步的方式，推荐<strong>使用 Promise 模式处理错误</strong>。对于这一点，在JavaScript 中有很好的实践参考。</li>
+</ol>
+<h2 id="编程应准确的区分各种异常。"><a href="#编程应准确的区分各种异常。" class="headerlink" title="编程应准确的区分各种异常。"></a>编程应准确的区分各种异常。</h2><h3 id="建立统一分类的错误字典。"><a href="#建立统一分类的错误字典。" class="headerlink" title="建立统一分类的错误字典。"></a>建立统一分类的错误字典。</h3><p>无论你是使用错误码还是异常捕捉，都需要认真并<strong>统一地做好错误的分类</strong>。最好是<strong>在一个地方定义相关的错误</strong>。比如，HTTP 的 4XX 表示客户端有问题，5XX 则表示服务端有问题。也就是说，你要<strong>建立一个错误字典</strong>。</p>
+<h3 id="定义错误的严重程度。"><a href="#定义错误的严重程度。" class="headerlink" title="定义错误的严重程度。"></a>定义错误的严重程度。</h3><p><strong>定义错误的严重程度</strong>。比如，Fatal 表示重大错误，Error 表示资源或需求得不到满足，Warning 表示并不一定是个错误但还是需要引起注意，Info 表示不是错误只是一个信息，Debug 表示这是给内部开发人员用于调试程序的。</p>
+<h3 id="为你的错误定义提供清楚的文档以及每种错误的代码示例。"><a href="#为你的错误定义提供清楚的文档以及每种错误的代码示例。" class="headerlink" title="为你的错误定义提供清楚的文档以及每种错误的代码示例。"></a>为你的错误定义提供清楚的文档以及每种错误的代码示例。</h3><p><strong>为你的错误定义提供清楚的文档以及每种错误的代码示例</strong>。如果你是做 RESTful API 方面的，使用 Swagger 会帮你很容易搞定这个事。</p>
+<h3 id="服务调用跟踪的分析来关联错误。"><a href="#服务调用跟踪的分析来关联错误。" class="headerlink" title="服务调用跟踪的分析来关联错误。"></a>服务调用跟踪的分析来关联错误。</h3><p><strong>对于分布式的系统，推荐使用 APM 相关的软件</strong>。尤其是使用 Zipkin 这样的服务调用跟踪的分析来关联错误。</p>
+<h2 id="不使用异常处理业务逻辑。"><a href="#不使用异常处理业务逻辑。" class="headerlink" title="不使用异常处理业务逻辑。"></a>不使用异常处理业务逻辑。</h2><h3 id="使用条件判断处理业务逻辑。"><a href="#使用条件判断处理业务逻辑。" class="headerlink" title="使用条件判断处理业务逻辑。"></a>使用条件判断处理业务逻辑。</h3><p><strong>不要用错误处理逻辑来处理业务逻辑</strong>。也就是说，<strong>不要使用异常捕捉这样的方式来处理业务逻辑，而是应该用条件判断</strong>。如果一个逻辑控制可以用 if - else 清楚地表达，非常不建议使用异常方式处理。异常捕捉是用来处理不期望发生的事的，而错误码则用来处理可能会发生的事。</p>
+<h2 id="正确处理NullPointException。"><a href="#正确处理NullPointException。" class="headerlink" title="正确处理NullPointException。"></a>正确处理NullPointException。</h2><h3 id="null不是一个合法对象。"><a href="#null不是一个合法对象。" class="headerlink" title="null不是一个合法对象。"></a>null不是一个合法对象。</h3><p><strong>null不是一个合法对象</strong>，null的类型本来应该是NULL，也就是自己。</p>
+<h3 id="尽量避免产生null指针"><a href="#尽量避免产生null指针" class="headerlink" title="尽量避免产生null指针"></a>尽量避免产生null指针</h3><p>尽量不要产生null指针，<strong>尽量不要使用null来初始化变量</strong>，函数尽量不要返回null，函数返回没有，出错的结果尽量使用java的异常机制</p>
+<h3 id="“出错了”和“没有”是两码事，不要混淆两者之间的含义。"><a href="#“出错了”和“没有”是两码事，不要混淆两者之间的含义。" class="headerlink" title="“出错了”和“没有”是两码事，不要混淆两者之间的含义。"></a>“出错了”和“没有”是两码事，不要混淆两者之间的含义。</h3><p><strong>“出错了”和“没有”是两码事</strong>，java的try..catch语法相当的繁琐和蹩脚，你足够小心可以返回null表示“没找到”。“没有”是很正常的，“出错”表示罕见情况，正常情况下存在有意义的值，偶然出了问题表示出错了，应该使用异常而不是使用异常。</p>
+<h3 id="不要catch-NullPointerException，具体情况具体分析。"><a href="#不要catch-NullPointerException，具体情况具体分析。" class="headerlink" title="不要catch NullPointerException，具体情况具体分析。"></a>不要catch NullPointerException，具体情况具体分析。</h3><p><strong>不要catch NullPointerException</strong>。按具体情况对症下药。<strong>在null可能出现的当时就检查它是否是null</strong>，然后进行相应的处理。</p>
+<h3 id="不要把null放进“容器数据结构”里，避免对全节点的非空判断。"><a href="#不要把null放进“容器数据结构”里，避免对全节点的非空判断。" class="headerlink" title="不要把null放进“容器数据结构”里，避免对全节点的非空判断。"></a>不要把null放进“容器数据结构”里，避免对全节点的非空判断。</h3><p><strong>不要把null放进“容器数据结构”里</strong>。所谓容器（collection），是指以一些对象以某种方式集合在一起，所以null不应该被放进Array，List，Set等结构，不应该出现在Map的key或者value里因为对象<strong>在容器里的位置一般是动态决定的</strong>，所以一旦null从某个入口跑进去了，你就很难再搞明白它去了哪里，<strong>你就得被迫在所有从这个容器里取值的位置检查null</strong>。你也很难知道到底是谁把它放进去的，代码多了就导致调试极其困难。如果你真要表示“没有”，那你就干脆不要把它放进去（Array，List，Set没有元素，Map根本没那个entry），或者你可以<strong>指定一个特殊的，真正合法的对象，用来表示“没有”</strong>。</p>
+<h3 id="明确null所代表的意义，尽早检查和处理null返回值"><a href="#明确null所代表的意义，尽早检查和处理null返回值" class="headerlink" title="明确null所代表的意义，尽早检查和处理null返回值"></a>明确null所代表的意义，尽早检查和处理null返回值</h3><p><strong>函数调用：明确null所代表的意义，尽早检查和处理null返回值，减少null的传递</strong>。null很讨厌的一个地方，在于它<strong>在不同的地方可能表示不同的意义</strong>。有时候它表示“没有”，“没找到”。有时候它表示“出错了”，“失败了”。有时候它甚至可以表示“成功了”。如果你调用的函数有可能返回null，那么你应该在第一时间对null做出“有意义”的处理。“有意义”是什么意思呢？我的意思是，使用这函数的人，应该明确的知道在拿到null的情况下该怎么做，承担起责任来。他不应该只是“向上级汇报”，把责任踢给自己的调用者。</p>
+<h3 id="明确声明不接受null参数，当参数是null立即奔溃。"><a href="#明确声明不接受null参数，当参数是null立即奔溃。" class="headerlink" title="明确声明不接受null参数，当参数是null立即奔溃。"></a>明确声明不接受null参数，当参数是null立即奔溃。</h3><p>函数作者：<strong>明确声明不接受null参数，当参数是null立即奔溃</strong>。不要试图对null进行“容错”，不要让程序继续继续执行，如果调用者使用了null作为参数，<strong>那么调用者（而不是函数作者）应该对程序的崩溃负全责</strong>。一个很简单的做法是使用Objects.requireNonNull()。</p>
+<h3 id="使用-NotNull和-Nullable标记，进行代码静态分析。"><a href="#使用-NotNull和-Nullable标记，进行代码静态分析。" class="headerlink" title="使用@NotNull和@Nullable标记，进行代码静态分析。"></a>使用@NotNull和@Nullable标记，进行代码静态分析。</h3><p><strong>使用@NotNull和@Nullable标记</strong>，IntelliJ本身会对含有这种标记的代码进行静态分析，指出运行时可能出现NullPointerException的地方。</p>
+<h3 id="使用Optional类型"><a href="#使用Optional类型" class="headerlink" title="使用Optional类型"></a>使用Optional类型</h3><p><strong>使用Optional类型</strong>，null指针的问题之所以存在，是因为你可以在没有“检查”null的情况下，“访问”对象的成员。Optional类型的设计原理，<strong>就是把“检查”和“访问”这两个操作合二为一，成为一个“原子操作”</strong>。这样你没法只访问，而不进行检查。这种做法其实是ML，Haskell等语言里的模式匹配（pattern matching）的一个特例。模式匹配使得类型判断和访问成员这两种操作合二为一，所以你没法犯错。</p>
+<h2 id="循环中不放置异常代码。"><a href="#循环中不放置异常代码。" class="headerlink" title="循环中不放置异常代码。"></a>循环中不放置异常代码。</h2><h3 id="最好把整个循环体外放在-try-语句块内。"><a href="#最好把整个循环体外放在-try-语句块内。" class="headerlink" title="最好把整个循环体外放在 try 语句块内。"></a>最好把整个循环体外放在 try 语句块内。</h3><p><strong>不推荐在循环体里处理错误</strong>。这里说的更多的情况是对于 try-catch 这种情况，对于绝大多数的情况你不需要这样做。最好把整个循环体外放在 try 语句块内，而在外面做 catch。</p>
+<h3 id="避免调用包含try-catch语句块的函数。"><a href="#避免调用包含try-catch语句块的函数。" class="headerlink" title="避免调用包含try..catch语句块的函数。"></a>避免调用包含try..catch语句块的函数。</h3><p>异常包含在for循环语句中，换个角度，类A中执行了一段循环，<strong>循环中调用了B类方法，B类中被调用方法又包含try-catch语句块</strong>。褪去类的层次结构，代码如出一辙</p>
+<h2 id="异常处理后清理分配资源。"><a href="#异常处理后清理分配资源。" class="headerlink" title="异常处理后清理分配资源。"></a>异常处理后清理分配资源。</h2><h3 id="清理已分配的资源。"><a href="#清理已分配的资源。" class="headerlink" title="清理已分配的资源。"></a>清理已分配的资源。</h3><p>处理错误时，<strong>总是要清理已分配的资源</strong>。这点非常关键，比如打开一个没有权限的文件，写文件时出现的写错误，发送文件到网络端发现网络故障的错误，等等。这一类错误属于程序运行环境的问题。<strong>使是 try-catch-finally</strong>，<strong>或是用 RAII 技术</strong>，或是 Go 的 defer 都可以容易地做到。</p>
+<h2 id="精简打印异常日志。"><a href="#精简打印异常日志。" class="headerlink" title="精简打印异常日志。"></a>精简打印异常日志。</h2><h3 id="能找到那个机器，能找到用户做了什么。"><a href="#能找到那个机器，能找到用户做了什么。" class="headerlink" title="能找到那个机器，能找到用户做了什么。"></a>能找到那个机器，能找到用户做了什么。</h3><p>现代的网络应用使用nginx做服务器路由，而nginx本身能使用复杂的算法在多台机器做负载均衡，但是这样的做法，往往导致出现问题后<strong>不知道是在哪台机子上出的问题</strong>。这点可以通过修改nginx的配置来避免，并且开发人员编写的的日志<strong>打印内容往往十分粗糙</strong>，无法恰到好处的打印出错的关键信息，使得就算知道了在哪台机子上出的问题，也无法通过日志判断是什么地方出现了问题。而这点就需要<strong>开发人员遵照日志打印范式来开发功能</strong>，并且<strong>通过日志来debug</strong>。</p>
+<h3 id="错误日志的输出使用错误码，利于日志分析软件进行自动化监控。"><a href="#错误日志的输出使用错误码，利于日志分析软件进行自动化监控。" class="headerlink" title="错误日志的输出使用错误码，利于日志分析软件进行自动化监控。"></a>错误日志的输出使用错误码，利于日志分析软件进行自动化监控。</h3><p>错误日志的输出最好使用错误码，而不是错误信息。打印错误日志的时候，除了要用统一的格式，最好不要用错误信息，而使用相应的错误码，错误码不一定是数字，也可以是一个能从错误字典里找到的一个唯一的可以让人读懂的关键字。这样，会非常有利于日志分析软件进行自动化监控，而不是要从错误信息中做语义分析。比如：HTTP 的日志中就会有 HTTP 的返回码，如：404。但我更推荐使用像PageNotFound这样的标识，这样人和机器都很容易处理。</p>
+<h3 id="同一个地方不停的报错，控制日志只打印错误和次数。"><a href="#同一个地方不停的报错，控制日志只打印错误和次数。" class="headerlink" title="同一个地方不停的报错，控制日志只打印错误和次数。"></a>同一个地方不停的报错，控制日志只打印错误和次数。</h3><p>对于同一个地方不停的报错，最好<strong>不要都打到日志里</strong>。不然这样会导致其它日志被淹没了，也会导致日志文件太大，最好的实践是，<strong>打出一个错误以及出现的次数</strong>。 </p>
+<h2 id="打印异常关键信息。"><a href="#打印异常关键信息。" class="headerlink" title="打印异常关键信息。"></a>打印异常关键信息。</h2><h3 id="用很少的时间来跟踪应用程序中复杂问题的起因。"><a href="#用很少的时间来跟踪应用程序中复杂问题的起因。" class="headerlink" title="用很少的时间来跟踪应用程序中复杂问题的起因。"></a>用很少的时间来跟踪应用程序中复杂问题的起因。</h3><p><strong>记录可能影响应用程序运行的异常</strong>。至少要采取一些永久的方式，<strong>记录下可能影响应用程序操作的异常</strong>。理想情况下，当然是在第一时间解决引发异常的基本问题。不过，无论采用哪种处理操作，一般总应记录下潜在的关键问题。别看这个操作很简单，但它可以<strong>帮助您用很少的时间来跟踪应用程序中复杂问题的起因</strong>。</p>
+<h3 id="在代码的最外层捕捉打印日志。"><a href="#在代码的最外层捕捉打印日志。" class="headerlink" title="在代码的最外层捕捉打印日志。"></a>在代码的最外层捕捉打印日志。</h3><p>定义了 2 个类 A 和 B。其中 A 类中调用了 B 类的代码，并且 A 类和 B 类中都捕捉打印了异常。同一段异常会被打印 2 次。如果层次再复杂一点，不去考虑打印日志消耗的系统性能，仅仅在异常日志中去定位异常具体的问题已经够头疼的了。<strong>其实打印日志只需要在代码的最外层捕捉打印就可以了</strong>，<strong>异常打印也可以写成 AOP，织入到框架的最外层</strong>。</p>
+<h3 id="知道导致问题的原因。"><a href="#知道导致问题的原因。" class="headerlink" title="知道导致问题的原因。"></a>知道导致问题的原因。</h3><p>异常不仅要能够让开发人员知道哪里出了问题，更多时候<strong>开发人员还需要知道是什么原因导致的问题</strong>，我们知道 java .lang.Exception 有字符串类型参数的构造方法，这个字符串可以<strong>自定义成通俗易懂的提示信息</strong>。</p>
+<h3 id="知道是什么参数导致了这样的异常。"><a href="#知道是什么参数导致了这样的异常。" class="headerlink" title="知道是什么参数导致了这样的异常。"></a>知道是什么参数导致了这样的异常。</h3><p>简单的自定义信息开发人员只能知道哪里出现了异常，但是很多的情况下，开发人员更需要知道<strong>是什么参数导致了这样的异常</strong>。这个时候我们就需要将方法调用的参数信息追加到自定义信息中。下例只列举了一个参数的情况，多个参数的情况下，可以<strong>单独写一个工具类组织这样的字符串</strong>。参数信息字符串如下“Exception in 方法名 with 对象 Id : ”+ id</p>
+<h2 id="合理考虑日志框架。"><a href="#合理考虑日志框架。" class="headerlink" title="合理考虑日志框架。"></a>合理考虑日志框架。</h2><h3 id="日志库之间本身不兼容。"><a href="#日志库之间本身不兼容。" class="headerlink" title="日志库之间本身不兼容。"></a>日志库之间本身不兼容。</h3><p>现如今 Java 第三方日志库的种类越来越多，一个大项目中会引入各种各样的框架，而这些框架又会依赖不同的日志库的实现。最麻烦的问题倒不是引入所有需要的这些日志库，问题在于引入的这些<strong>日志库之间本身不兼容</strong>。如果在项目初期可能还好解决，可以把所有代码中的日志库根据需要重新引入一遍，或者换一套框架。但这样的成本不是每个项目都承受的起的，而且越是随着项目的进行，这种风险就越大。</p>
+<h3 id="通过配置-Properties-或-xml-文件控制日志实现类。"><a href="#通过配置-Properties-或-xml-文件控制日志实现类。" class="headerlink" title="通过配置 Properties 或 xml 文件控制日志实现类。"></a>通过配置 Properties 或 xml 文件控制日志实现类。</h3><p>怎么样才能有效的避免类似的问题发生呢，现在的大多数框架已经考虑到了类似的问题，可以通过<strong>配置 Properties 或 xml 文件</strong>、参数或者运行时扫描 Lib 库中的日志实现类，真正在应用程序运行时才确定具体应用哪个特定的日志库。</p>
+<h3 id="利用拦截器或者过滤器实现日志的打印。"><a href="#利用拦截器或者过滤器实现日志的打印。" class="headerlink" title="利用拦截器或者过滤器实现日志的打印。"></a>利用拦截器或者过滤器实现日志的打印。</h3><p>其实根据不需要多层次打印日志那条原则，我们就可以简化很多原本调用日志打印代码的类。很多情况下，我们可以<strong>利用拦截器或者过滤器实现日志的打印</strong>，降低代码维护、迁移的成本。</p>
+<h2 id="避免在前台出现错误代码。"><a href="#避免在前台出现错误代码。" class="headerlink" title="避免在前台出现错误代码。"></a>避免在前台出现错误代码。</h2><h3 id="对于客户来说任何异常都没有实际意义。"><a href="#对于客户来说任何异常都没有实际意义。" class="headerlink" title="对于客户来说任何异常都没有实际意义。"></a>对于客户来说任何异常都没有实际意义。</h3><p>将异常直接打印在客户端的例子屡见不鲜，以 JSP 为例，一旦代码运行出现异常，默认情况下容器将异常堆栈信息直接打印在页面上。其实<strong>从客户角度来说，任何异常都没有实际意义</strong>，绝大多数的客户也根本看不懂异常信息，软件开发也要<strong>尽量避免将异常直接呈现给用户</strong>。在异常中引入错误代码，一旦出现异常，我们只要将异常的错误代码呈现给用户，或者将错误代码转换成更通俗易懂的提示。其实这里的错误代码还包含另外一个功能，<strong>开发人员亦可以根据错误代码准确的知道了发生了什么类型异常</strong>。</p>
+<h2 id="异端，不要catch异常，不要做空判断，异常抛到最外层处理。"><a href="#异端，不要catch异常，不要做空判断，异常抛到最外层处理。" class="headerlink" title="异端，不要catch异常，不要做空判断，异常抛到最外层处理。"></a>异端，不要catch异常，不要做空判断，异常抛到最外层处理。</h2><h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>开发团队的成员代码水平参差不齐，<strong>对NULL和异常处理手段不恰当</strong>，导致错误在生产环境出现后，<strong>无法找到错误原因</strong>，更有甚者，连<strong>系统出错了也没有人知道</strong>。</p>
+<h3 id="开发组长定义好异常，异常继承RuntimeException。"><a href="#开发组长定义好异常，异常继承RuntimeException。" class="headerlink" title="开发组长定义好异常，异常继承RuntimeException。"></a>开发组长定义好异常，异常继承RuntimeException。</h3><ul>
+<li>非检查异常（unckecked exception）：Error 和 RuntimeException 以及他们的子类。javac在编译时，<strong>不会提示和发现这样的异常，不要求在程序处理这些异常</strong>。所以如果愿意，我们可以编写代码处理（使用try…catch…finally）这样的异常，也可以不处理。对于这些异常，我们应该修正代码，而不是去通过异常处理器处理 。这样的异常发生的原因多半是代码写的有问题。如除0错误ArithmeticException，错误的强制类型转换错误ClassCastException，数组索引越界ArrayIndexOutOfBoundsException，使用了空对象NullPointerException等等。</li>
+</ul>
+<ul>
+<li>检查异常（checked exception）：除了Error 和 RuntimeException的其它异常。javac强制要求程序员为这样的异常做预备处理工作（使用try…catch…finally或者throws）。在方法中要么用try-catch语句捕获它并处理，要么用throws子句声明抛出它，否则编译不会通过。这样的异常一般是由程序的运行环境导致的。因为程序可能被运行在各种未知的环境下，而程序员无法干预用户如何使用他编写的程序，于是程序员就应该为这样的异常时刻准备着。如SQLException , IOException,ClassNotFoundException 等。</li>
+</ul>
+<h3 id="不允许开发人员捕获异常。"><a href="#不允许开发人员捕获异常。" class="headerlink" title="不允许开发人员捕获异常。"></a>不允许开发人员捕获异常。</h3><p>正对以上非检测和检测异常的定义，异常上对开发人员就一点要求：<strong>不允许开发人员捕获异常</strong>，<strong>异常都抛出到controller上用AOP处理</strong>。后台（如队列等）<strong>异常一定要有通知机制</strong>，要<strong>第一时间知道异常</strong>。</p>
+<h3 id="少加空判断，加了空判断就要测试为空的场景！"><a href="#少加空判断，加了空判断就要测试为空的场景！" class="headerlink" title="少加空判断，加了空判断就要测试为空的场景！"></a>少加空判断，加了空判断就要测试为空的场景！</h3><p><strong>空判断大部分时候不需要</strong>，你如果写了空判断，你就<strong>必须测试为空和不为空二种场景</strong>，要么就<strong>不要写空判断</strong>。</p>
+<h2 id="相关主题"><a href="#相关主题" class="headerlink" title="相关主题"></a>相关主题</h2><p><a href="http://www.yinwang.org/blog-cn/2015/11/21/programming-philosophy" target="_blank" rel="noopener">编程的智慧 - 王垠</a> 用平易进人的词句阐述了自己对编程独到的理解，并且每个观点都给出了有一定深度的工程实践实例，值得一读。<br><a href="https://time.geekbang.org/column/article/675" target="_blank" rel="noopener">程序中的错误处理：错误返回码和异常捕捉 - 左耳听风</a>  从编程语言的发展历程解释了异常的来源和发展，并给出了不同语言环境下处理错误的方法。<br><a href="https://time.geekbang.org/column/article/693" target="_blank" rel="noopener">程序中的错误处理：异步编程和最佳实践 - 左耳听风</a> 讲解了异步编程下的异常处理。<br><a href="https://xwjie.github.io/rule/exception.html" target="_blank" rel="noopener">异常处理 - 晓风轻</a> 从自身实际项目实践角度给出了异常处理的几条规则，其中的解决思路值得学习。<br><a href="https://www.ibm.com/developerworks/cn/java/j-lo-exception-misdirection/index.html" target="_blank" rel="noopener">Java 异常处理的误区和经验总结</a> 较为严谨的分析了异常处理相关的问题，并给出了相关实例的实践。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/02/QUESTION-MD/" rel="next" title="问问">
+                <i class="fa fa-chevron-left"></i> 问问
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">MR.X_YY</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#异常处理小记"><span class="nav-number">1.</span> <span class="nav-text">异常处理小记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#小记"><span class="nav-number">1.1.</span> <span class="nav-text">小记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用try-catch-finally-编程模式。"><span class="nav-number">1.2.</span> <span class="nav-text">使用try{..}catch..finally..编程模式。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#让代码自己解释自己。"><span class="nav-number">1.2.1.</span> <span class="nav-text">让代码自己解释自己。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分离正常逻辑、错误处理和资源清理代码。"><span class="nav-number">1.2.2.</span> <span class="nav-text">分离正常逻辑、错误处理和资源清理代码。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无法忽略异常。"><span class="nav-number">1.2.3.</span> <span class="nav-text">无法忽略异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多态式catch。"><span class="nav-number">1.2.4.</span> <span class="nav-text">多态式catch。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现函数的链式或嵌套调用。"><span class="nav-number">1.2.5.</span> <span class="nav-text">实现函数的链式或嵌套调用。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步的情形下实现难度较大。"><span class="nav-number">1.2.6.</span> <span class="nav-text">异步的情形下实现难度较大。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常捕获不绝对影响程序的性能。"><span class="nav-number">1.3.</span> <span class="nav-text">异常捕获不绝对影响程序的性能。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序在执行需要处理函数栈上的上下文。"><span class="nav-number">1.3.1.</span> <span class="nav-text">程序在执行需要处理函数栈上的上下文。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有异常的情况是少数的情况。"><span class="nav-number">1.3.2.</span> <span class="nav-text">有异常的情况是少数的情况。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不在try语句块里放置大量代码。"><span class="nav-number">1.4.</span> <span class="nav-text">不在try语句块里放置大量代码。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#完成一个简单单一的事情。"><span class="nav-number">1.4.1.</span> <span class="nav-text">完成一个简单单一的事情。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#大大加速你的调试过程。"><span class="nav-number">1.4.2.</span> <span class="nav-text">大大加速你的调试过程。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个函数使用独立的catch。"><span class="nav-number">1.5.</span> <span class="nav-text">多个函数使用独立的catch。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不使用覆盖式处理器如基类Exception去捕获异常。"><span class="nav-number">1.5.1.</span> <span class="nav-text">不使用覆盖式处理器如基类Exception去捕获异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对应的异常抛出不同的错误码。"><span class="nav-number">1.5.2.</span> <span class="nav-text">对应的异常抛出不同的错误码。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程时不要忽略任何异常。"><span class="nav-number">1.6.</span> <span class="nav-text">编程时不要忽略任何异常。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#无法知晓函数执行是否成功。"><span class="nav-number">1.6.1.</span> <span class="nav-text">无法知晓函数执行是否成功。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#只将异常输出到控制台，没有任何意义。"><span class="nav-number">1.6.2.</span> <span class="nav-text">只将异常输出到控制台，没有任何意义。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不能预知潜在的异常。"><span class="nav-number">1.6.3.</span> <span class="nav-text">不能预知潜在的异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般不要忽略问题。"><span class="nav-number">1.6.4.</span> <span class="nav-text">一般不要忽略问题。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序出现异常尽量立即处理。"><span class="nav-number">1.7.</span> <span class="nav-text">程序出现异常尽量立即处理。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#让调用者变得更简单。"><span class="nav-number">1.7.1.</span> <span class="nav-text">让调用者变得更简单。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清晰代码的层次结构。"><span class="nav-number">1.7.2.</span> <span class="nav-text">清晰代码的层次结构。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体问题具体解决。"><span class="nav-number">1.7.3.</span> <span class="nav-text">具体问题具体解决。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将异常转化为业务上下文。"><span class="nav-number">1.7.4.</span> <span class="nav-text">将异常转化为业务上下文。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免能避免的异常。"><span class="nav-number">1.7.5.</span> <span class="nav-text">避免能避免的异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尽可能的处理异常。"><span class="nav-number">1.7.6.</span> <span class="nav-text">尽可能的处理异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用统一的模式处理同一异常。"><span class="nav-number">1.7.7.</span> <span class="nav-text">用统一的模式处理同一异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回原始的错误。"><span class="nav-number">1.7.8.</span> <span class="nav-text">返回原始的错误。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要把特定的异常转化为更通用的异常。"><span class="nav-number">1.7.9.</span> <span class="nav-text">不要把特定的异常转化为更通用的异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多次封装异常会丢失原有的有效信息。"><span class="nav-number">1.7.10.</span> <span class="nav-text">多次封装异常会丢失原有的有效信息。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在-RuntimeException-类中添加相关的检查。"><span class="nav-number">1.7.11.</span> <span class="nav-text">在 RuntimeException 类中添加相关的检查。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Promise-模式处理异步调用的异常。"><span class="nav-number">1.7.12.</span> <span class="nav-text">使用 Promise 模式处理异步调用的异常。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编程应准确的区分各种异常。"><span class="nav-number">1.8.</span> <span class="nav-text">编程应准确的区分各种异常。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建立统一分类的错误字典。"><span class="nav-number">1.8.1.</span> <span class="nav-text">建立统一分类的错误字典。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义错误的严重程度。"><span class="nav-number">1.8.2.</span> <span class="nav-text">定义错误的严重程度。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为你的错误定义提供清楚的文档以及每种错误的代码示例。"><span class="nav-number">1.8.3.</span> <span class="nav-text">为你的错误定义提供清楚的文档以及每种错误的代码示例。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务调用跟踪的分析来关联错误。"><span class="nav-number">1.8.4.</span> <span class="nav-text">服务调用跟踪的分析来关联错误。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不使用异常处理业务逻辑。"><span class="nav-number">1.9.</span> <span class="nav-text">不使用异常处理业务逻辑。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用条件判断处理业务逻辑。"><span class="nav-number">1.9.1.</span> <span class="nav-text">使用条件判断处理业务逻辑。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正确处理NullPointException。"><span class="nav-number">1.10.</span> <span class="nav-text">正确处理NullPointException。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#null不是一个合法对象。"><span class="nav-number">1.10.1.</span> <span class="nav-text">null不是一个合法对象。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尽量避免产生null指针"><span class="nav-number">1.10.2.</span> <span class="nav-text">尽量避免产生null指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#“出错了”和“没有”是两码事，不要混淆两者之间的含义。"><span class="nav-number">1.10.3.</span> <span class="nav-text">“出错了”和“没有”是两码事，不要混淆两者之间的含义。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要catch-NullPointerException，具体情况具体分析。"><span class="nav-number">1.10.4.</span> <span class="nav-text">不要catch NullPointerException，具体情况具体分析。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不要把null放进“容器数据结构”里，避免对全节点的非空判断。"><span class="nav-number">1.10.5.</span> <span class="nav-text">不要把null放进“容器数据结构”里，避免对全节点的非空判断。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#明确null所代表的意义，尽早检查和处理null返回值"><span class="nav-number">1.10.6.</span> <span class="nav-text">明确null所代表的意义，尽早检查和处理null返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#明确声明不接受null参数，当参数是null立即奔溃。"><span class="nav-number">1.10.7.</span> <span class="nav-text">明确声明不接受null参数，当参数是null立即奔溃。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-NotNull和-Nullable标记，进行代码静态分析。"><span class="nav-number">1.10.8.</span> <span class="nav-text">使用@NotNull和@Nullable标记，进行代码静态分析。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Optional类型"><span class="nav-number">1.10.9.</span> <span class="nav-text">使用Optional类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环中不放置异常代码。"><span class="nav-number">1.11.</span> <span class="nav-text">循环中不放置异常代码。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#最好把整个循环体外放在-try-语句块内。"><span class="nav-number">1.11.1.</span> <span class="nav-text">最好把整个循环体外放在 try 语句块内。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#避免调用包含try-catch语句块的函数。"><span class="nav-number">1.11.2.</span> <span class="nav-text">避免调用包含try..catch语句块的函数。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异常处理后清理分配资源。"><span class="nav-number">1.12.</span> <span class="nav-text">异常处理后清理分配资源。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#清理已分配的资源。"><span class="nav-number">1.12.1.</span> <span class="nav-text">清理已分配的资源。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精简打印异常日志。"><span class="nav-number">1.13.</span> <span class="nav-text">精简打印异常日志。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#能找到那个机器，能找到用户做了什么。"><span class="nav-number">1.13.1.</span> <span class="nav-text">能找到那个机器，能找到用户做了什么。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误日志的输出使用错误码，利于日志分析软件进行自动化监控。"><span class="nav-number">1.13.2.</span> <span class="nav-text">错误日志的输出使用错误码，利于日志分析软件进行自动化监控。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同一个地方不停的报错，控制日志只打印错误和次数。"><span class="nav-number">1.13.3.</span> <span class="nav-text">同一个地方不停的报错，控制日志只打印错误和次数。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打印异常关键信息。"><span class="nav-number">1.14.</span> <span class="nav-text">打印异常关键信息。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用很少的时间来跟踪应用程序中复杂问题的起因。"><span class="nav-number">1.14.1.</span> <span class="nav-text">用很少的时间来跟踪应用程序中复杂问题的起因。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在代码的最外层捕捉打印日志。"><span class="nav-number">1.14.2.</span> <span class="nav-text">在代码的最外层捕捉打印日志。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#知道导致问题的原因。"><span class="nav-number">1.14.3.</span> <span class="nav-text">知道导致问题的原因。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#知道是什么参数导致了这样的异常。"><span class="nav-number">1.14.4.</span> <span class="nav-text">知道是什么参数导致了这样的异常。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合理考虑日志框架。"><span class="nav-number">1.15.</span> <span class="nav-text">合理考虑日志框架。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志库之间本身不兼容。"><span class="nav-number">1.15.1.</span> <span class="nav-text">日志库之间本身不兼容。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过配置-Properties-或-xml-文件控制日志实现类。"><span class="nav-number">1.15.2.</span> <span class="nav-text">通过配置 Properties 或 xml 文件控制日志实现类。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用拦截器或者过滤器实现日志的打印。"><span class="nav-number">1.15.3.</span> <span class="nav-text">利用拦截器或者过滤器实现日志的打印。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免在前台出现错误代码。"><span class="nav-number">1.16.</span> <span class="nav-text">避免在前台出现错误代码。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对于客户来说任何异常都没有实际意义。"><span class="nav-number">1.16.1.</span> <span class="nav-text">对于客户来说任何异常都没有实际意义。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异端，不要catch异常，不要做空判断，异常抛到最外层处理。"><span class="nav-number">1.17.</span> <span class="nav-text">异端，不要catch异常，不要做空判断，异常抛到最外层处理。</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景"><span class="nav-number">1.17.1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发组长定义好异常，异常继承RuntimeException。"><span class="nav-number">1.17.2.</span> <span class="nav-text">开发组长定义好异常，异常继承RuntimeException。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不允许开发人员捕获异常。"><span class="nav-number">1.17.3.</span> <span class="nav-text">不允许开发人员捕获异常。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#少加空判断，加了空判断就要测试为空的场景！"><span class="nav-number">1.17.4.</span> <span class="nav-text">少加空判断，加了空判断就要测试为空的场景！</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关主题"><span class="nav-number">1.18.</span> <span class="nav-text">相关主题</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">MR.X_YY</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

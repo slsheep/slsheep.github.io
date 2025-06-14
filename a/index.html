@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+<a 
+   href="http://mpaytest.migu.cn:8080/migupay-web/UnifiedPay?xml=%3CadvPay%3E%3CpubInfo%3E%3Cversion%3E1.0%3C%2Fversion%3E%3CtransactionId%3E23232323%3C%2FtransactionId%3E%3CtransactionDate%3E20210826145234%3C%2FtransactionDate%3E%3CbusiCode%3E5003%3C%2FbusiCode%3E%3CoriginId%3E08%3C%2ForiginId%3E%3CreturnCode%2F%3E%3CreturnMsg%2F%3E%3CverifyCode%3Ec5304cc10d9209393d5ca0ece2af5a32ed0818ba07cb74e1e8af73071e6ebb71%3C%2FverifyCode%3E%3C%2FpubInfo%3E%3CbusiData%3E%3CaccountType%3E1%3C%2FaccountType%3E%3CaccountCode%3E17512573528%3C%2FaccountCode%3E%3CpayItemType%3E20%3C%2FpayItemType%3E%3CorderId%3E23232323%3C%2ForderId%3E%3CpayAmount%3E0.01%3C%2FpayAmount%3E%3CbankId%3EHF%3C%2FbankId%3E%3CpayNotifyPageURL%3Ehttps%3A%2F%2Fcattest.migu.cn%3A8083%2Fwhalecallback%2Fdelivery%2Fpagevisit%2FreleaseVisit%2F42941%3C%2FpayNotifyPageURL%3E%3CpayNotifyIntURL%3Ehttps%3A%2F%2Fcattest.migu.cn%3A8083%2Fwhalecallback%2Fdelivery%2Fpagevisit%2FreleaseVisit%2F42941%3C%2FpayNotifyIntURL%3E%3CpayNotifyErrorURL%3Ehttps%3A%2F%2Fcattest.migu.cn%3A8083%2Fwhalecallback%2Fdelivery%2Fpagevisit%2FreleaseVisit%2F42941%3C%2FpayNotifyErrorURL%3E%3CpayMethod%3E0%3C%2FpayMethod%3E%3CType%3EWAP%3C%2FType%3E%3CidValue%3E17512573528%3C%2FidValue%3E%3CproductId%3E009%3C%2FproductId%3E%3ChideTitle%3E0%3C%2FhideTitle%3E%3CchannelEXT%3EchannelId%3A80000024003G%3BcontentId%3A661020210425183501%3BVasType%3A0%3BservType%3A1%3Bcharpterid%3A%3BMSISDN%3A17512573528%3C%2FchannelEXT%3E%3CidType%3E0%3C%2FidType%3E%3CphonePayBean%3E%3Cinit%3E%3CnetId%3E8de2d93bb12847638b90fdf0132ce98d%3C%2FnetId%3E%3Coption%3E%3Cumark%3ECommon2%3C%2Fumark%3E%3Cprotocol%3Ehttps%3C%2Fprotocol%3E%3CorderId%2F%3E%3Ccolor%2F%3E%3C%2Foption%3E%3Cinitcallbackfunction%3Eabc%3C%2Finitcallbackfunction%3E%3C%2Finit%3E%3Cpay%3E%7B%22channelId%22%3A%22800000240036%22%2C%22cpId%22%3A%22698038%22%2C%22fee%22%3A0.01%2C%22goodsId%22%3A%221212%22%2C%22operType%22%3A%2201%22%2C%22orderId%22%3A%22232323%22%2C%22payDesc%22%3A%22%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81%E6%8F%8F%E8%BF%B0%22%2C%22payTitle%22%3A%22%E6%B5%8B%E8%AF%95%E4%BA%A7%E5%93%81%22%2C%22payType%22%3A%2218%22%2C%22productId%22%3A%22661020210425183501%22%2C%22spCode%22%3A%22698038%22%2C%22uniChannelId%22%3A%22300000100001%22%7D%3C%2Fpay%3E%3C%2FphonePayBean%3E%3C%2FbusiData%3E%3C%2FadvPay%3E&charset=utf-8&enctype=2">
+   点击
+   </a>
+<form>
+<input id="data" style="width:500px;height:100px;" type="text" name="url" value="">
+<br>
+<input type="submit" value="Submit" onclick="redirect()">
+</form> 
+</body>
+<script type="text/javascript">
+function redirect() {
+var url=document.getElementById("data").value;
+window.open(url);
+}
+</script>
+</html>
